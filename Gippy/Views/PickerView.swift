@@ -79,7 +79,7 @@ struct PickerView: View {
         if let error = errorMessage {
             errorView(error)
         } else if !results.isEmpty {
-            GifGridView(gifs: results)
+            GifGridView(gifs: results, searchTerm: query)
         } else if isLoading {
             loadingView
         } else {

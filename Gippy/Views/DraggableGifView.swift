@@ -8,6 +8,7 @@ struct DraggableGifView: NSViewRepresentable {
     let gif: Gif
     let imageData: Data?
     let isHovered: Bool
+    var searchTerm: String = ""
 
     func makeNSView(context: Context) -> DragGifNSView {
         DragGifNSView()
@@ -15,6 +16,7 @@ struct DraggableGifView: NSViewRepresentable {
 
     func updateNSView(_ nsView: DragGifNSView, context: Context) {
         nsView.gif = gif
+        nsView.searchTerm = searchTerm
         nsView.setImageData(imageData)
         if isHovered { nsView.prefetchIfNeeded() }
     }
@@ -24,6 +26,7 @@ struct DraggableGifView: NSViewRepresentable {
 
 final class DragGifNSView: NSView {
     var gif: Gif?
+    var searchTerm: String = ""
 
     private let imageView = NSImageView()
     private var mouseDownEvent: NSEvent?
@@ -79,19 +82,30 @@ final class DragGifNSView: NSView {
         if let cached = Self.cache.object(forKey: key),
            FileManager.default.fileExists(atPath: cached.path!) { return }
         Self.cache.removeObject(forKey: key)
+        let term = searchTerm
         Task {
             guard let (data, _) = try? await URLSession.shared.data(from: gif.gifURL) else { return }
-            let url = Self.tempURL(for: gif)
+            let url = Self.tempURL(for: gif, searchTerm: term)
             guard (try? data.write(to: url)) != nil else { return }
             Self.cache.setObject(url as NSURL, forKey: key)
         }
     }
 
-    private static func tempURL(for gif: Gif) -> URL {
+    private static func tempURL(for gif: Gif, searchTerm: String) -> URL {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("gippy", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let safe = String(gif.description.prefix(40)).replacingOccurrences(of: "/", with: "-")
-        return dir.appendingPathComponent("\(gif.id)_\(safe).gif")
+        let name = sanitizedFilename(searchTerm.isEmpty ? gif.description : searchTerm)
+        return dir.appendingPathComponent("\(name).gif")
+    }
+
+    private static func sanitizedFilename(_ s: String) -> String {
+        let allowed = CharacterSet.alphanumerics.union(.init(charactersIn: " -_"))
+        return String(s.unicodeScalars.filter { allowed.contains($0) })
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: " ", with: "-")
+            .lowercased()
+            .prefix(50)
+            .description
     }
 
     // MARK: - Mouse events
@@ -109,8 +123,7 @@ final class DragGifNSView: NSView {
         // Capture for the promise callback (main thread write, background read — safe
         // because write always happens before the promise queue reads it).
         promiseGifURL = gif.gifURL
-        let safe = String(gif.description.prefix(40)).replacingOccurrences(of: "/", with: "-")
-        promiseName = "\(safe).gif"
+        promiseName = "\(Self.sanitizedFilename(searchTerm.isEmpty ? gif.description : searchTerm)).gif"
 
         // Freeze popover so it can't auto-dismiss while we're dragging to another app.
         NotificationCenter.default.post(name: .gifDragBegan, object: nil)

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GifGridView: View {
     let gifs: [Gif]
+    var searchTerm: String = ""
 
     private let columns = [
         GridItem(.flexible(), spacing: 6),
@@ -13,7 +14,7 @@ struct GifGridView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 6) {
                 ForEach(gifs) { gif in
-                    GifCell(gif: gif)
+                    GifCell(gif: gif, searchTerm: searchTerm)
                 }
             }
             .padding(8)

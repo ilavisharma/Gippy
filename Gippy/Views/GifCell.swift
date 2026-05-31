@@ -2,13 +2,14 @@ import SwiftUI
 
 struct GifCell: View {
     let gif: Gif
+    var searchTerm: String = ""
     @Environment(Store.self) var store
     @State private var loader = ImageLoader()
     @State private var isHovered = false
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            DraggableGifView(gif: gif, imageData: loader.imageData, isHovered: isHovered)
+            DraggableGifView(gif: gif, imageData: loader.imageData, isHovered: isHovered, searchTerm: searchTerm)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             if loader.imageData == nil {
