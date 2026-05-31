@@ -63,6 +63,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] _ in
             self?.showPopover()
         }
+
+        // Freeze the popover while a drag is in flight so it can't
+        // auto-dismiss before Slack receives the file promise.
+        NotificationCenter.default.addObserver(
+            forName: .gifDragBegan,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.popover.behavior = .applicationDefined
+        }
+        NotificationCenter.default.addObserver(
+            forName: .gifDragEnded,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.popover.behavior = .transient
+        }
     }
 
     @objc private func togglePopover() {

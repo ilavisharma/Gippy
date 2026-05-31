@@ -8,17 +8,13 @@ struct GifCell: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            // GIF fills the entire cell
-            AnimatedImageView(data: loader.imageData)
+            DraggableGifView(gif: gif, imageData: loader.imageData, isHovered: isHovered)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Shimmer placeholder while loading
             if loader.imageData == nil {
-                RoundedRectangle(cornerRadius: 0)
-                    .fill(Color(NSColor.quaternaryLabelColor).opacity(0.4))
+                Color(NSColor.quaternaryLabelColor).opacity(0.4)
             }
 
-            // Favourite button — only visible on hover
             if isHovered {
                 Button {
                     store.toggleFavorite(gif)
@@ -41,7 +37,6 @@ struct GifCell: View {
             RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color(NSColor.separatorColor), lineWidth: 0.5)
         )
-        .onDrag { DragProvider.itemProvider(for: gif) }
         .onHover { isHovered = $0 }
         .animation(.easeInOut(duration: 0.15), value: isHovered)
         .onAppear { loader.load(url: gif.previewURL) }
