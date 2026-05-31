@@ -23,7 +23,7 @@ The project has `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` and `SWIFT_APPROACHA
 
 **AppDelegate** owns everything at the top level: `NSStatusItem`, `NSPopover`, the `Store` instance, and the Carbon hotkey registration. The popover's content is `PickerView` injected with `Store` via `.environment(store)`.
 
-**The drag path is the critical feature.** `GifCell` renders a `DraggableGifView` (`NSViewRepresentable` wrapping `DragGifNSView`). On hover, `DragGifNSView.prefetchIfNeeded()` downloads the full GIF to `tmp/gifdropper/<id>_<name>.gif` in the background. On mouse drag, if the file is already on disk, it is handed to Slack as a concrete `NSURL` pasteboard writer — this registers `public.file-url` on the pasteboard, identical to dragging a file from Finder. `NSFilePromiseProvider` is kept as a fallback for when the download hasn't completed yet.
+**The drag path is the critical feature.** `GifCell` renders a `DraggableGifView` (`NSViewRepresentable` wrapping `DragGifNSView`). On hover, `DragGifNSView.prefetchIfNeeded()` downloads the full GIF to `tmp/gippy/<id>_<name>.gif` in the background. On mouse drag, if the file is already on disk, it is handed to Slack as a concrete `NSURL` pasteboard writer — this registers `public.file-url` on the pasteboard, identical to dragging a file from Finder. `NSFilePromiseProvider` is kept as a fallback for when the download hasn't completed yet.
 
 **Why concrete NSURL, not NSFilePromiseProvider?** Slack (Electron/Chromium) only accepts `public.file-url`. `NSFilePromiseProvider` registers `com.apple.pasteboard.promised-file-content-type` which Slack's drop zone rejects at hover time — `writePromiseTo` is never called and the drag bounces back.
 
@@ -33,7 +33,7 @@ The project has `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` and `SWIFT_APPROACHA
 
 **GIF display:** SwiftUI `Image`/`AsyncImage` do not animate GIFs. `DragGifNSView` (inside `DraggableGifView: NSViewRepresentable`) contains an `NSImageView` with `animates = true`. Layout priorities on the NSImageView must stay `.defaultLow` on all axes — otherwise `LazyVGrid` triggers layout recursion warnings.
 
-**Keychain:** The Tenor API key is stored under service `com.lavi.GifDropper`, account key `tenorAPIKey`. `Keychain.read/write` are `nonisolated` static methods. The key is entered once in `SettingsView` (gear icon in the popover).
+**Keychain:** The Tenor API key is stored under service `com.lavi.Gippy`, account key `tenorAPIKey`. `Keychain.read/write` are `nonisolated` static methods. The key is entered once in `SettingsView` (gear icon in the popover).
 
 **Tenor API:** `GET https://tenor.googleapis.com/v2/search` with `media_filter=tinygif,gif`. `tinygif` is used for the preview grid (small, fast); `gif` is used for the drag payload (full quality).
 

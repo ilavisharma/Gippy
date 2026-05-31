@@ -1,7 +1,7 @@
 import Foundation
 
 struct TenorService: Sendable {
-    private let clientKey = "gifdropper"
+    private let clientKey = "gippy"
     private let limit = 24
 
     func search(_ query: String) async throws -> [Gif] {

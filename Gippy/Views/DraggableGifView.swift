@@ -38,7 +38,7 @@ final class DragGifNSView: NSView {
     private static let promiseQueue: OperationQueue = {
         let q = OperationQueue()
         q.qualityOfService = .userInitiated
-        q.name = "com.lavi.GifDropper.filePromise"
+        q.name = "com.lavi.Gippy.filePromise"
         return q
     }()
 
@@ -88,7 +88,7 @@ final class DragGifNSView: NSView {
     }
 
     private static func tempURL(for gif: Gif) -> URL {
-        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("gifdropper", isDirectory: true)
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("gippy", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let safe = String(gif.description.prefix(40)).replacingOccurrences(of: "/", with: "-")
         return dir.appendingPathComponent("\(gif.id)_\(safe).gif")
@@ -165,7 +165,7 @@ extension DragGifNSView: NSFilePromiseProviderDelegate {
         completionHandler: @escaping (Error?) -> Void
     ) {
         guard let gifURL = promiseGifURL else {
-            completionHandler(NSError(domain: "GifDropper", code: 1))
+            completionHandler(NSError(domain: "Gippy", code: 1))
             return
         }
         Task {

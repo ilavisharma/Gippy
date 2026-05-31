@@ -2,7 +2,7 @@ import Foundation
 import Security
 
 enum Keychain {
-    private static let service = "com.lavi.GifDropper"
+    private static let service = "com.lavi.Gippy"
 
     nonisolated static func write(key: String, value: String) {
         let data = Data(value.utf8)

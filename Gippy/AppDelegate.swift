@@ -20,7 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "photo.stack", accessibilityDescription: "GIF Dropper")
+            button.image = NSImage(systemSymbolName: "photo.stack", accessibilityDescription: "Gippy")
             button.action = #selector(togglePopover)
             button.target = self
         }
@@ -50,14 +50,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         InstallEventHandler(
             GetApplicationEventTarget(),
             { (_, _, _) -> OSStatus in
-                NotificationCenter.default.post(name: .gifDropperHotKey, object: nil)
+                NotificationCenter.default.post(name: .gippyHotKey, object: nil)
                 return OSStatus(noErr)
             },
             1, &eventType, nil, &hotKeyEventHandler
         )
 
         NotificationCenter.default.addObserver(
-            forName: .gifDropperHotKey,
+            forName: .gippyHotKey,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -106,5 +106,5 @@ private func fourCC(_ s: String) -> FourCharCode {
 }
 
 extension Notification.Name {
-    static let gifDropperHotKey = Notification.Name("gifDropperHotKey")
+    static let gippyHotKey = Notification.Name("gippyHotKey")
 }

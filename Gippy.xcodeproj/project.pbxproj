@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		5B4B8DAE2FCC2C67005AF9EF /* GifDropper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GifDropper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B4B8DAE2FCC2C67005AF9EF /* Gippy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gippy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5B4B8DB02FCC2C67005AF9EF /* GifDropper */ = {
+		5B4B8DB02FCC2C67005AF9EF /* Gippy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GifDropper;
+			path = Gippy;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		5B4B8DAF2FCC2C67005AF9EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5B4B8DAE2FCC2C67005AF9EF /* GifDropper.app */,
+				5B4B8DAE2FCC2C67005AF9EF /* Gippy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5B4B8DAD2FCC2C67005AF9EF /* GifDropper */ = {
+		5B4B8DAD2FCC2C67005AF9EF /* Gippy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B4B8DB92FCC2C68005AF9EF /* Build configuration list for PBXNativeTarget "GifDropper" */;
+			buildConfigurationList = 5B4B8DB92FCC2C68005AF9EF /* Build configuration list for PBXNativeTarget "Gippy" */;
 			buildPhases = (
 				5B4B8DAA2FCC2C67005AF9EF /* Sources */,
 				5B4B8DAB2FCC2C67005AF9EF /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				5B4B8DB02FCC2C67005AF9EF /* GifDropper */,
 			);
-			name = GifDropper;
+			name = Gippy;
 			packageProductDependencies = (
 			);
 			productName = GifDropper;
-			productReference = 5B4B8DAE2FCC2C67005AF9EF /* GifDropper.app */;
+			productReference = 5B4B8DAE2FCC2C67005AF9EF /* Gippy.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5B4B8DAD2FCC2C67005AF9EF /* GifDropper */,
+				5B4B8DAD2FCC2C67005AF9EF /* Gippy */,
 			);
 		};
 /* End PBXProject section */
@@ -250,7 +250,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = GifDropper/GifDropper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Gippy/GifDropper.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -260,6 +260,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Gippy;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -267,8 +268,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lavi.GifDropper;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lavi.Gippy;
+				PRODUCT_NAME = Gippy;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -284,7 +285,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = GifDropper/GifDropper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Gippy/GifDropper.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -294,6 +295,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Gippy;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -301,8 +303,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lavi.GifDropper;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lavi.Gippy;
+				PRODUCT_NAME = Gippy;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -325,7 +327,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B4B8DB92FCC2C68005AF9EF /* Build configuration list for PBXNativeTarget "GifDropper" */ = {
+		5B4B8DB92FCC2C68005AF9EF /* Build configuration list for PBXNativeTarget "Gippy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5B4B8DBA2FCC2C68005AF9EF /* Debug */,
