@@ -1,0 +1,49 @@
+import SwiftUI
+
+struct GifCell: View {
+    let gif: Gif
+    @Environment(Store.self) var store
+    @State private var loader = ImageLoader()
+    @State private var isHovered = false
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            // GIF fills the entire cell
+            AnimatedImageView(data: loader.imageData)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Shimmer placeholder while loading
+            if loader.imageData == nil {
+                RoundedRectangle(cornerRadius: 0)
+                    .fill(Color(NSColor.quaternaryLabelColor).opacity(0.4))
+            }
+
+            // Favourite button — only visible on hover
+            if isHovered {
+                Button {
+                    store.toggleFavorite(gif)
+                } label: {
+                    Image(systemName: store.isFavorite(gif) ? "star.fill" : "star")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(store.isFavorite(gif) ? .yellow : .white)
+                        .padding(5)
+                        .background(.black.opacity(0.5))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .padding(4)
+                .transition(.opacity)
+            }
+        }
+        .frame(height: 130)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color(NSColor.separatorColor), lineWidth: 0.5)
+        )
+        .onDrag { DragProvider.itemProvider(for: gif) }
+        .onHover { isHovered = $0 }
+        .animation(.easeInOut(duration: 0.15), value: isHovered)
+        .onAppear { loader.load(url: gif.previewURL) }
+    }
+}
