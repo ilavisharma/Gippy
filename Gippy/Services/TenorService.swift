@@ -1,24 +1,34 @@
 import Foundation
 
+struct TenorSearchPage: Sendable {
+    let gifs: [Gif]
+    let next: String?
+}
+
 struct TenorService: Sendable {
     private let clientKey = "gippy"
-    private let limit = 24
+    private let limit = 50
 
-    func search(_ query: String) async throws -> [Gif] {
+    func search(_ query: String, after cursor: String? = nil) async throws -> TenorSearchPage {
         guard let apiKey = Keychain.read(key: "tenorAPIKey"), !apiKey.isEmpty else {
             throw TenorError.noAPIKey
         }
         var components = URLComponents(string: "https://tenor.googleapis.com/v2/search")!
-        components.queryItems = [
+        var items: [URLQueryItem] = [
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "key", value: apiKey),
             URLQueryItem(name: "client_key", value: clientKey),
             URLQueryItem(name: "limit", value: String(limit)),
             URLQueryItem(name: "media_filter", value: "tinygif,gif"),
         ]
+        if let cursor, !cursor.isEmpty {
+            items.append(URLQueryItem(name: "pos", value: cursor))
+        }
+        components.queryItems = items
         let (data, _) = try await URLSession.shared.data(from: components.url!)
         let response = try JSONDecoder().decode(TenorResponse.self, from: data)
-        return response.results.compactMap(Gif.init(tenorResult:))
+        let next = response.next.flatMap { $0.isEmpty ? nil : $0 }
+        return TenorSearchPage(gifs: response.results.compactMap(Gif.init(tenorResult:)), next: next)
     }
 }
 
@@ -33,6 +43,7 @@ enum TenorError: LocalizedError {
 
 private struct TenorResponse: Decodable {
     let results: [TenorResult]
+    let next: String?
 }
 
 private struct TenorResult: Decodable {

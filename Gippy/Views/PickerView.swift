@@ -5,6 +5,9 @@ struct PickerView: View {
     @State private var query = ""
     @State private var results: [Gif] = []
     @State private var isLoading = false
+    @State private var isLoadingMore = false
+    @State private var nextCursor: String? = nil
+    @State private var currentQuery = ""
     @State private var errorMessage: String?
     @State private var showSettings = false
     @FocusState private var searchFocused: Bool
@@ -79,7 +82,12 @@ struct PickerView: View {
         if let error = errorMessage {
             errorView(error)
         } else if !results.isEmpty {
-            GifGridView(gifs: results, searchTerm: query)
+            GifGridView(
+                gifs: results,
+                searchTerm: query,
+                isLoadingMore: isLoadingMore,
+                onLoadMore: nextCursor != nil ? { loadMore() } : nil
+            )
         } else if isLoading {
             loadingView
         } else {
@@ -172,14 +180,34 @@ struct PickerView: View {
         isLoading = true
         errorMessage = nil
         results = []
+        nextCursor = nil
+        currentQuery = trimmed
         store.addRecentSearch(trimmed)
         Task {
             do {
-                results = try await tenor.search(trimmed)
+                let page = try await tenor.search(trimmed)
+                results = page.gifs
+                nextCursor = page.next
             } catch {
                 errorMessage = error.localizedDescription
             }
             isLoading = false
+        }
+    }
+
+    private func loadMore() {
+        guard !isLoadingMore, let cursor = nextCursor else { return }
+        isLoadingMore = true
+        Task {
+            do {
+                let page = try await tenor.search(currentQuery, after: cursor)
+                let seen = Set(results.map(\.id))
+                results.append(contentsOf: page.gifs.filter { !seen.contains($0.id) })
+                nextCursor = page.next
+            } catch {
+                // silently ignore pagination errors
+            }
+            isLoadingMore = false
         }
     }
 }
